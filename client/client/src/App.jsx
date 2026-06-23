@@ -1,32 +1,24 @@
-import { useEffect,useState } from "react";
+import { BrowserRouter,Routes,Route } from "react-router-dom";
+
+import Navbar from "./components/Navbar";
+import Home from "./pages/Home";
+import Contact from "./pages/Contact";
+import About from "./pages/About";
+import Login from "./pages/login";
 
 function App(){
-  const [message,setMessage]=useState("")
+    return(
+        <BrowserRouter>
+        <Navbar/>
+        <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/login" element={<Login/>}/>
+        </Routes>
 
-  useEffect(()=>{
-    fetch("http://localhost:5000/api/health")
-    .then((res)=>res.json())
-    .then((data)=>{
-      setMessage(data)
-      
-      
-      
-    })
-    
-    
-    .catch(()=>{
-      setMessage("Backend not Connected")
-    })
-  },[])
-  return(
-    <div>
-      <h1>AI Career Copilot</h1>
-      <p>Your Ai powered placement preparation companion.</p>
-      <h3>Backend Status:{message.status}</h3>
-      <h4>Backend Version:{message.version}</h4>
-      <button>Get Started</button>
-    </div>
-  )
+        
+        </BrowserRouter>
+    )
 }
-
 export default App;
