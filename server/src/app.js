@@ -14,6 +14,17 @@ app.get("/api/health",(req,res)=>{
     })
 })
 
+app.post("/api/register",(req,res)=>{
+        console.log(req.body);
+       
+        res.json({
+            success:"true",
+            
+            message:"User Registered succesfully"
+            
+        })
+    })
+
 const PORT=5000;
 
 app.listen(PORT,()=>{
