@@ -4,16 +4,36 @@ import { useState } from "react";
 function Login(){
      const [email,setEmail]=useState("");
       const [password,setPassword]=useState("");
+      const [message,setMessage]=useState("");
 
-      const handleSubmit=(e)=>{
+
+      const handleSubmit=async (e)=>{
         e.preventDefault();
+        
+        const responseLogin= await fetch("http://localhost:5000/api/login",{
+          method:"POST",
+          headers:{
+               "Content-Type":"application/json"
+          },
+          body:JSON.stringify({
+               email,password
 
-        console.log("Email:",email);
-        console.log("Password",password);
-
-        setEmail(" ")
-        setPassword(" ")
-      }
+          }
+     )
+})
+        
+        const data=await responseLogin.json();
+        setMessage(data.message);
+     
+        console.log(email);
+        console.log(password);
+     
+       
+      
+     
+     
+}
+     
 
       
 
@@ -33,7 +53,7 @@ function Login(){
 
             <button type="submit">Login</button>
 
-            <p>{email}</p>
+            <p>{message}</p>
 
            
 </form>
@@ -44,4 +64,5 @@ function Login(){
      )
      
 }
+
 export default Login;

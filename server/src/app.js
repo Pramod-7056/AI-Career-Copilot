@@ -25,6 +25,30 @@ app.post("/api/register",(req,res)=>{
         })
     })
 
+    app.post("/api/login",(req,res)=>{
+        const {email,password}=req.body;
+        console.log(req.body)
+        if(email==="admin123@gmail.com"&&password==="12345678"){
+       
+       return res.json({
+            success:true,
+            
+            message:"Login succesfully"
+            
+        })
+    
+    }
+ 
+    return res.json({
+    success:false,
+    message:"Invalid credentials"
+    
+        
+})
+    
+})
+
+
 const PORT=5000;
 
 app.listen(PORT,()=>{
