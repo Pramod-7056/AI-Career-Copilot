@@ -1,8 +1,19 @@
 const express=require('express')
 const cors=require('cors')
+const path=require("path")
+
+const User=require("../models/user")
+
+require("dotenv").config({
+    path:path.join(__dirname,"../.env"),
+});
+const connectDB=require("../config/db");
+
 
 
 const app=express()
+connectDB();
+
 app.use(cors())
 app.use(express.json())
 
@@ -14,16 +25,28 @@ app.get("/api/health",(req,res)=>{
     })
 })
 
-app.post("/api/register",(req,res)=>{
-        console.log(req.body);
-       
-        res.json({
-            success:"true",
-            
-            message:"User Registered succesfully"
-            
-        })
-    })
+
+ app.post("/api/register", async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
+
+    const user = await User.create({
+      name,
+      email,
+      password,
+    });
+
+    res.json({
+      message: "User registered successfully",
+      user,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong",
+    });
+  }
+});
+    
 
     app.post("/api/login",(req,res)=>{
         const {email,password}=req.body;
