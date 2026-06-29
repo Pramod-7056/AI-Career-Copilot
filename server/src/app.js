@@ -47,29 +47,44 @@ app.get("/api/health",(req,res)=>{
   }
 });
     
+app.post("/api/login", async (req, res) => {
+  try{  
+    const { email, password } = req.body;
 
-    app.post("/api/login",(req,res)=>{
-        const {email,password}=req.body;
-        console.log(req.body)
-        if(email==="admin123@gmail.com"&&password==="12345678"){
-       
-       return res.json({
-            success:true,
-            
-            message:"Login succesfully"
-            
-        })
+   
+
+    const user = await User.findOne({ email });
     
+    console.log(user)
+
+
+    if(!user){
+      return res.json({
+        success:false,
+        message:"User not found"
+      })
     }
- 
+    if(user.password !== password){
+      return res.json({
+        success:false,
+        message:"Incorrect password"
+      })
+    }
+    
     return res.json({
-    success:false,
-    message:"Invalid credentials"
-    
-        
-})
-    
-})
+      success:true,
+      message:"Login successfully"
+      
+    })
+  }
+  catch(err){
+    console.log(err)
+    return res.status(500).json({
+      success:false,
+      message:"Server error"
+    })
+  }
+});
 
 
 const PORT=5000;
