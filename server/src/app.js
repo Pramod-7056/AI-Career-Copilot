@@ -1,6 +1,7 @@
 const express=require('express')
 const cors=require('cors')
 const path=require("path")
+const bcrypt=require("bcrypt");
 
 const User=require("../models/user")
 
@@ -30,10 +31,12 @@ app.get("/api/health",(req,res)=>{
   try {
     const { name, email, password } = req.body;
 
+    const hashedPassword=await bcrypt.hash(password,10);
+
     const user = await User.create({
       name,
       email,
-      password,
+      password:hashedPassword
     });
 
     res.json({
@@ -50,9 +53,6 @@ app.get("/api/health",(req,res)=>{
 app.post("/api/login", async (req, res) => {
   try{  
     const { email, password } = req.body;
-
-   
-
     const user = await User.findOne({ email });
     
     console.log(user)
@@ -64,7 +64,9 @@ app.post("/api/login", async (req, res) => {
         message:"User not found"
       })
     }
-    if(user.password !== password){
+     
+    const match=await bcrypt.compare(password,user.password)
+    if(!match){
       return res.json({
         success:false,
         message:"Incorrect password"
