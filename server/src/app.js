@@ -2,6 +2,7 @@ const express=require('express')
 const cors=require('cors')
 const path=require("path")
 const bcrypt=require("bcrypt");
+const jwt=require("jsonwebtoken")
 
 const User=require("../models/user")
 
@@ -18,11 +19,44 @@ connectDB();
 app.use(cors())
 app.use(express.json())
 
+
+const verifyToken=(req,res,next)=>{
+  const authHeader=req.headers.authorization;
+  if(!authHeader){
+
+    return res.status(401).json({
+      success:false,
+      message:"No Token Provided"
+    }) 
+  }
+
+  const token=authHeader.split(" ")[1]
+  try{
+    const decoded=jwt.verify(token,process.env.JWT_SECRET)
+    console.log(decoded)
+    req.user=decoded;
+    next();
+  }
+  catch(error){
+ return res.status(401).json({
+      success:false,
+      message:"Invalid token"
+    }) 
+  }
+  
+}
+
 app.get("/api/health",(req,res)=>{
     res.json({
         status:"working",
         project:"AI Career  Copilot",
        version:"1.0"
+    })
+})
+
+app.get("/api/profile",verifyToken,(req,res)=>{
+    res.json({
+       message:"Welcome to ur profile"
     })
 })
 
@@ -72,10 +106,22 @@ app.post("/api/login", async (req, res) => {
         message:"Incorrect password"
       })
     }
+
+
+    const token=jwt.sign(
+      {id:user._id},
+      process.env.JWT_SECRET,
+      {expiresIn:"1d"}
+      
     
+  )
+    
+
     return res.json({
       success:true,
-      message:"Login successfully"
+      
+      message:"Login successfully",
+      token
       
     })
   }
