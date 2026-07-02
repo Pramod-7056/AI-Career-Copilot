@@ -54,9 +54,12 @@ app.get("/api/health",(req,res)=>{
     })
 })
 
-app.get("/api/profile",verifyToken,(req,res)=>{
+app.get("/api/profile",verifyToken,async (req,res)=>{
+        const user=await User.findById(req.user.id).select("-password")
+
     res.json({
-       message:"Welcome to ur profile"
+       success:true,
+       user
     })
 })
 

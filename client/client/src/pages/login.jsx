@@ -1,11 +1,12 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 
 function Login(){
      const [email,setEmail]=useState("");
       const [password,setPassword]=useState("");
       const [message,setMessage]=useState("");
-
+      const navigate=useNavigate();
 
       const handleSubmit=async (e)=>{
         e.preventDefault();
@@ -23,13 +24,19 @@ function Login(){
 })
         
         const data=await responseLogin.json();
+        console.log(data)
+
+         if(data.success){
+           localStorage.setItem("token",data.token);
+           console.log(localStorage.getItem("token"))
+           alert("Login Successful");
+           navigate("/profile");
+        }
         setMessage(data.message);
      
         console.log(email);
         console.log(password);
-     
-       
-      
+
      
      
 }
