@@ -38,7 +38,15 @@ const verifyToken=(req,res,next)=>{
     next();
   }
   catch(error){
- return res.status(401).json({
+
+    if(error.name==="TokenExpiredError"){
+      return res.status(401).json({
+      success:false,
+      message:"Session expired.Please login again"
+    }) 
+    }
+    
+        return res.status(401).json({
       success:false,
       message:"Invalid token"
     }) 
