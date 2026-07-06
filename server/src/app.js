@@ -3,6 +3,7 @@ const cors=require('cors')
 const path=require("path")
 const bcrypt=require("bcrypt");
 const jwt=require("jsonwebtoken")
+const Goal=require("../models/goal")
 
 const User=require("../models/user")
 
@@ -69,6 +70,45 @@ app.get("/api/profile",verifyToken,async (req,res)=>{
        success:true,
        user
     })
+})
+
+
+app.post("/api/goals",verifyToken,async(req,res)=>{
+  try{
+    const {title}=req.body;
+    const goal=await Goal.create({
+      title,
+      user:req.user.id
+    })
+    res.status(201).json({
+      success:true,
+      goal
+    })
+  }
+  catch(error){
+    res.status(500).json({
+      success:false,
+      message:error.message
+    })
+  }
+})
+
+
+app.get("/api/goals",verifyToken,async (req,res)=>{
+  try{
+        const goals=await Goal.find({user:req.user.id})
+
+    res.json({
+       success:true,
+       goals
+    })
+  }
+  catch(error){
+    res.status(500).json({
+      success:false,
+      message:error.message
+    })
+  }
 })
 
 
