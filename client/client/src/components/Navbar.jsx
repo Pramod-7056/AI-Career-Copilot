@@ -16,6 +16,8 @@ function Navbar(){
             {token?(
                 <>
                 <Link to="/profile">Profile</Link> |
+
+                <Link to="/dashboard">Dashboard</Link> |
                  <button onClick={()=>{
                     localStorage.removeItem("token");
                     alert("Logout successfully")

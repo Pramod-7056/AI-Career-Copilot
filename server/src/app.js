@@ -111,6 +111,77 @@ app.get("/api/goals",verifyToken,async (req,res)=>{
   }
 })
 
+app.put("/api/goals/:id", verifyToken, async (req, res) => {
+    try {
+        const goal = await Goal.findById(req.params.id);
+
+        if (!goal) {
+            return res.status(404).json({
+                success: false,
+                message: "Goal not found"
+            });
+        }
+
+        if (goal.user.toString() !== req.user.id) {
+            return res.status(401).json({
+                success: false,
+                message: "Unauthorized"
+            });
+        }
+
+        goal.completed = !goal.completed;
+
+        await goal.save();
+
+        res.json({
+            success: true,
+            goal
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+});
+
+
+app.delete("/api/goals/:id", verifyToken, async (req, res) => {
+    try {
+        const goal = await Goal.findById(req.params.id);
+
+        if (!goal) {
+            return res.status(404).json({
+                success: false,
+                message: "Goal not found"
+            });
+        }
+
+        if (goal.user.toString() !== req.user.id) {
+            return res.status(401).json({
+                success: false,
+                message: "Unauthorized"
+            });
+        }
+
+      
+
+        await goal.deleteOne();
+
+        res.json({
+            success: true,
+            message:"Goal deleted successfully"
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+});
+
 
  app.post("/api/register", async (req, res) => {
   try {
