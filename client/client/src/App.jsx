@@ -8,6 +8,7 @@ import Login from "./pages/login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import Dashboard from "./pages/Dashboard";
+import Goals from "./pages/Goals";
 
 function App(){
 
@@ -24,6 +25,7 @@ function App(){
             <Route path="/register" element={<Register/>}/>
             <Route path="/profile" element={<Profile/>}/>
             <Route path="/dashboard" element={<Dashboard/>}/>
+            <Route path="/goals" element={<Goals/>}/>
         </Routes>
 
         

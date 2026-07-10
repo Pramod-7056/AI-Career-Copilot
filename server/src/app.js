@@ -64,20 +64,29 @@ app.get("/api/health",(req,res)=>{
 })
 
 app.get("/api/profile",verifyToken,async (req,res)=>{
+  try{
         const user=await User.findById(req.user.id).select("-password")
 
     res.json({
        success:true,
        user
     })
+  }
+  catch(error){
+    res.status(500).json({
+      success:false,
+      message:error.message
+    })
+  }
 })
 
 
 app.post("/api/goals",verifyToken,async(req,res)=>{
   try{
-    const {title}=req.body;
+    const {title,description}=req.body;
     const goal=await Goal.create({
       title,
+      description,
       user:req.user.id
     })
     res.status(201).json({
@@ -145,6 +154,28 @@ app.put("/api/goals/:id", verifyToken, async (req, res) => {
         });
     }
 });
+
+app.put("/api/goals/edit/:id",verifyToken,async(req,res)=>{
+  try{
+  const goal = await Goal.findById(req.params.id);
+  goal.title=req.body.title
+  goal.description=req.body.description
+
+  await goal.save();
+
+     res.json({
+            success: true,
+            goal
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+  
+})
 
 
 app.delete("/api/goals/:id", verifyToken, async (req, res) => {

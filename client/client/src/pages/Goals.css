@@ -1,12 +1,18 @@
-body{
+
+.goals-page{
+    min-height: 100vh;
+    background: #0f172a;
+    padding: 40px 0;
+}
+.dashboard{
     background:#f4f6f8;
     font-family:Arial, Helvetica, sans-serif;
-}
-
-.dashboard{
     max-width:900px;
     margin:40px auto;
     padding:20px;
+    min-height: 100vh;
+    background: #0f172a;
+    color: white;
 }
 
 .dashboard h1{
@@ -31,7 +37,8 @@ body{
 }
 
 .goal-card{
-    background:white;
+    background:#1e293b;
+    color: white;
     border-radius:12px;
     padding:20px;
     margin-bottom:18px;
@@ -90,13 +97,31 @@ body{
     padding:12px;
     border-radius:8px;
     border:1px solid #ccc;
+    background: #334155;
+    color:white;
 }
+
+
+.goal-input input::placeholder{
+    color: aliceblue;
+}
+
+
 
 .goal-input button{
     background:#2563eb;
     color:white;
     border:none;
     padding:12px 18px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.edit-btn{
+    background:#a3a316;
+    color:white;
+    border:none;
+    padding:8px 15px;
     border-radius:8px;
     cursor:pointer;
 }

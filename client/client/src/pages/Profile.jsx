@@ -21,9 +21,10 @@ function Profile(){
     },[])
     return(
         <div>
-            <h1>Profile</h1>
+            <h1>My Profile</h1>
             {user?(
                 <>
+                <h2>Name:{user.name}</h2>
                 <h3>Email:{user.email}</h3>
                 <p>ID:{user._id}</p>
                 </>
