@@ -21,7 +21,7 @@ function Navbar(){
                  <button onClick={()=>{
                     localStorage.removeItem("token");
                     alert("Logout successfully")
-                    window.location.href="/";
+                    window.location.href="/login";
                  }}> Logout</button>
 
                 </>

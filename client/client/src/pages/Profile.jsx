@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useEffect } from "react";
+import "./Profile.css"
 
 function Profile(){
 
@@ -19,20 +20,86 @@ function Profile(){
         }
         fetchProfile();
     },[])
-    return(
-        <div>
-            <h1>My Profile</h1>
-            {user?(
-                <>
-                <h2>Name:{user.name}</h2>
-                <h3>Email:{user.email}</h3>
-                <p>ID:{user._id}</p>
-                </>
-            ):(
-                <h3>Loading...</h3>
-            )}
-        </div>
-    )
+    return (
+        <div className="profile-page">
+<div className="profile-container">
+
+<div className="profile-header">
+
+<div className="profile-avatar">
+👤
+</div>
+
+<h1>{user?.name}</h1>
+
+<p>{user?.email}</p>
+
+<button className="edit-btn">
+Edit Profile
+</button>
+
+</div>
+
+<div className="profile-grid">
+
+<div className="profile-card">
+
+<h2>Basic Information</h2>
+
+<div className="profile-item">
+<label>Name</label>
+<p>{user?.name}</p>
+</div>
+
+<div className="profile-item">
+<label>Email</label>
+<p>{user?.email}</p>
+</div>
+
+<div className="profile-item">
+<label>Phone</label>
+<p>Not Added</p>
+</div>
+
+<div className="profile-item">
+<label>Bio</label>
+<p>Tell recruiters about yourself...</p>
+</div>
+
+</div>
+
+<div className="profile-card">
+
+<h2>Education</h2>
+
+<div className="profile-item">
+<label>College</label>
+<p>Not Added</p>
+</div>
+
+<div className="profile-item">
+<label>Degree</label>
+<p>Not Added</p>
+</div>
+
+<div className="profile-item">
+<label>Branch</label>
+<p>Not Added</p>
+</div>
+
+<div className="profile-item">
+<label>Graduation Year</label>
+<p>Not Added</p>
+</div>
+
+</div>
+
+</div>
+
+</div>
+</div>
+)
+       
 }
 
 export default Profile;

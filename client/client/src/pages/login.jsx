@@ -38,7 +38,7 @@ function Login(){
            localStorage.setItem("token",data.token);
            console.log(localStorage.getItem("token"))
            alert("Login Successful");
-           window.location.href="/profile"
+           window.location.href="/"
         }
         setMessage(data.message);
      
