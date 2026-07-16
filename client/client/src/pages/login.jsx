@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import "./Login.css"
 
 
 function Login(){
@@ -44,6 +45,7 @@ function Login(){
      
         console.log(email);
         console.log(password);
+        
 
      
      
@@ -53,9 +55,13 @@ function Login(){
       
 
      return(
-        <form onSubmit={handleSubmit}>
+          <div className="login-page">
+               <div className="login-card">
+                    
+        <form className="login-form"onSubmit={handleSubmit}>
        
             <h1>Login</h1>
+            
             <input type="email" placeholder="Enter ur email" value={email} onChange={(e)=>
             setEmail(e.target.value)
 
@@ -65,13 +71,18 @@ function Login(){
             setPassword(e.target.value)
 
             }/>
+            
 
             <button type="submit">Login</button>
 
             <p>{message}</p>
+         
 
            
 </form>
+</div>
+</div>
+
 
 
 

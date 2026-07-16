@@ -4,13 +4,14 @@ const path=require("path")
 const bcrypt=require("bcrypt");
 const jwt=require("jsonwebtoken")
 const Goal=require("../models/goal")
-
+const Project=require("../models/project")
 const User=require("../models/user")
 
 require("dotenv").config({
     path:path.join(__dirname,"../.env"),
 });
 const connectDB=require("../config/db");
+
 
 
 
@@ -41,8 +42,10 @@ const verifyToken=(req,res,next)=>{
   catch(error){
 
     if(error.name==="TokenExpiredError"){
+      alert("Session expired.Please login again")
       return res.status(401).json({
       success:false,
+      
       message:"Session expired.Please login again"
     }) 
     }
@@ -213,12 +216,166 @@ app.delete("/api/goals/:id", verifyToken, async (req, res) => {
     }
 });
 
+//project section
+
+app.post("/api/projects",verifyToken,async(req,res)=>{
+  try{
+    const {title,description,github_link,demo_link,tech_stack}=req.body
+    const project=await Project.create({
+      title,
+      description,
+      github_link,
+      demo_link,
+      tech_stack,
+      user:req.user.id
+    })
+    res.status(201).json({
+      success:true,
+      project
+    })
+  }
+  catch(error){
+    res.status(500).json({
+      success:false,
+      message:error.message
+    })
+  }
+})
+
+app.get("/api/projects",verifyToken,async(req,res)=>{
+  try{
+    const project=await Project.find({user:req.user.id})
+    if(project==""){
+      res.status(201).json({
+    success:false,
+    message:"No projects added"  })
+    }
+
+    res.status(201).json({
+      success:true,
+      project
+    })
+  }
+  catch(error){
+    res.status(500).json({
+    success:false,
+    message:error.message
+  })
+}
+})
+
+app.put("/api/projects/:id", verifyToken, async (req, res) => {
+
+    try {
+
+        const project = await Project.findById(req.params.id);
+
+        if (!project) {
+            return res.status(404).json({
+                success: false,
+                message: "Project not found"
+            });
+        }
+
+        if (project.user.toString() !== req.user.id) {
+            return res.status(401).json({
+                success: false,
+                message: "Unauthorized"
+            });
+        }
+
+        project.title = req.body.title;
+        project.description = req.body.description;
+        project.github_link = req.body.github_link;
+        project.demo_link = req.body.demo_link;
+        project.tech_stack = req.body.tech_stack;
+
+        await project.save();
+
+        res.json({
+            success: true,
+            project
+        });
+
+    } catch (error) {
+
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+
+    }
+
+});
+
+app.delete("/api/projects/:id", verifyToken, async (req, res) => {
+
+    try {
+
+        const project = await Project.findById(req.params.id);
+
+        if (!project) {
+            return res.status(404).json({
+                success: false,
+                message: "Project not found"
+            });
+        }
+
+        if (project.user.toString() !== req.user.id) {
+            return res.status(401).json({
+                success: false,
+                message: "Unauthorized"
+            });
+        }
+
+        await project.deleteOne();
+
+        res.json({
+            success: true,
+            message: "Project deleted successfully"
+        });
+
+    } catch (error) {
+
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+
+    }
+
+});
+
 
  app.post("/api/register", async (req, res) => {
   try {
     const { name, email, password } = req.body;
+    if(name==""||email==""){
+      return res.status(400).json({
+        success:false,
+        message:"name and email can't be empty"
+      })
+    }
+    if(password.length<6){
+       return res.status(400).json({
+        success:false,
+        message:"password length must be 6 characters"
+      })
+    }
 
     const hashedPassword=await bcrypt.hash(password,10);
+
+    
+      
+    const existingUser=await User.findOne({email})
+    if(existingUser){
+      return res.status(400).json({
+        success:false,
+        message:"User already exists"
+      })
+    }
+      
+    
 
     const user = await User.create({
       name,
@@ -227,11 +384,13 @@ app.delete("/api/goals/:id", verifyToken, async (req, res) => {
     });
 
     res.json({
+      success:true,
       message: "User registered successfully",
       user,
     });
   } catch (error) {
     res.status(500).json({
+      success:false,
       message: "Something went wrong",
     });
   }
@@ -243,6 +402,13 @@ app.post("/api/login", async (req, res) => {
     const user = await User.findOne({ email });
     
     console.log(user)
+    if(email==""||password==""){
+       return res.json({
+        success:false,
+        message:"email and password can't be empty"
+      })
+
+    }
 
 
     if(!user){

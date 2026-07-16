@@ -1,14 +1,16 @@
 import { BrowserRouter,Routes,Route } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
-import Home from "./pages/Home";
+import Home from "./pages/Home/Home";
 import Contact from "./pages/Contact";
 import About from "./pages/About";
 import Login from "./pages/login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
-import Dashboard from "./pages/Dashboard";
-import Goals from "./pages/Goals";
+import Dashboard from "./pages/Dashboard/Dashboard";
+import Goals from "./pages/Home/Goals";
+import Project from "./pages/Dashboard/Projects";
+
 
 function App(){
 
@@ -26,6 +28,7 @@ function App(){
             <Route path="/profile" element={<Profile/>}/>
             <Route path="/dashboard" element={<Dashboard/>}/>
             <Route path="/goals" element={<Goals/>}/>
+            <Route path="/projects" element={<Project/>}/>
         </Routes>
 
         

@@ -1,6 +1,9 @@
 import "./Dashboard.css";
 import { useState,useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 function Dashboard() {
+
+    const navigate=useNavigate();
 
     const [user,setUser]=useState(null);
         useEffect(()=>{
@@ -33,7 +36,7 @@ function Dashboard() {
           <h1>0%</h1>
         </div>
 
-        <div className="stat-card">
+        <div className="stat-card" onClick={()=>navigate("/projects")}>
           <h2>Projects</h2>
           <h1>0</h1>
         </div>
@@ -93,7 +96,7 @@ function Dashboard() {
 </div>
     </div>
 
-    <div className="dashboard-card">
+    <div className="dashboard-card" >
         <h2>🚀 Projects</h2>
         <div className="info-row">
     <span>Total Projects</span>
